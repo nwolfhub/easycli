@@ -27,21 +27,26 @@ public class EasyCLI {
     private void listenOnStream() {
         Scanner sc = new Scanner(in);
         while (true) {
-            String inp = sc.nextLine();
-            if(!inp.equals("")) {
-                String command = inp.split(" ")[0];
-                if (!tasks.containsKey(command)) {
-                    if (printNotFoundText) {
-                        print(commandNotFoundText.replace("{a}", command));
+            try {
+                String inp = sc.nextLine();
+                if (!inp.equals("")) {
+                    String command = inp.split(" ")[0];
+                    if (!tasks.containsKey(command)) {
+                        if (printNotFoundText) {
+                            print(commandNotFoundText.replace("{a}", command));
+                        }
+                    } else {
+                        List<String> args = new ArrayList<>();
+                        try {
+                            args = List.of(inp.substring(command.length() + 1).split(" "));
+                        } catch (Exception ignored) {
+                        }
+                        String[] argArr = args.toArray(new String[0]);
+                        tasks.get(command).act(this, argArr);
                     }
-                } else {
-                    List<String> args = new ArrayList<>();
-                    try {
-                        args = List.of(inp.substring(command.length() + 1).split(" "));
-                    } catch (Exception ignored) {}
-                    String[] argArr = args.toArray(new String[0]);
-                    tasks.get(command).act(this, argArr);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -116,7 +121,7 @@ public class EasyCLI {
         if (templates.size() == 0) {
             templates.put("default", Defaults.defaultTemplate);
         }
-        if (activeTemplate.equals("")) {
+        if (activeTemplate == null) {
             activeTemplate = new ArrayList<>(templates.values()).get(templates.size()-1).getName();
         }
         print(text, activeTemplate);
