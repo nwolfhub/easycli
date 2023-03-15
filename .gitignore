@@ -1,4 +1,4 @@
 settings.xml
 .idea/
 target
-src/main/java/org/nwolfhub/Main.java
+src/main/java/org/nwolfhub/easycli/Main.java
