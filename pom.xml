@@ -9,6 +9,12 @@
     <version>1.0.0</version>
     <name>EasyCTL</name>
     <description>Library to help you parse input asynchronously and print in style</description>
+    <url>https://github.com/nwolfhub/easycli</url>
+    <scm>
+        <url>
+            git@github.com:nwolfhub/easycli.git
+        </url>
+    </scm>
     <developers>
         <developer>
             <name>Klim</name>
