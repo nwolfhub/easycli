@@ -1,9 +1,9 @@
 package org.nwolfhub;
 
 public class Defaults {
-    public Border squareBorder = new Border("-", "-", "|");
-    public Template defaultTemplate = new Template("default", "", "\n");
-    public Template carriageReturn = new Template("carriage", "\r", "");
-    public Template boxedText = new Template("boxed", "", "").setBorder(squareBorder);
+    public static Border squareBorder = new Border("-", "-", "|");
+    public static Template defaultTemplate = new Template("default", "", "\n");
+    public static Template carriageReturn = new Template("carriage", "\r", "");
+    public static Template boxedText = new Template("boxed", "", "").setBorder(squareBorder);
 
 }

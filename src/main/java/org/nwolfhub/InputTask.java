@@ -10,5 +10,11 @@ public abstract class InputTask {
 
     }
 
-   public abstract void act();
+
+    /**
+     * Things to be done after command is recognized
+     * @param cli EasyCLI instance. Will be set automatically
+     * @param params text after space
+     */
+   public abstract void act(EasyCLI cli, String... params);
 }
