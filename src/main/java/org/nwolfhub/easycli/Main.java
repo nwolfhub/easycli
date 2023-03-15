@@ -1,4 +1,4 @@
-package org.nwolfhub;
+package org.nwolfhub.easycli;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,7 +1,4 @@
-package org.nwolfhub;
-
-import java.io.IOException;
-import java.io.InputStream;
+package org.nwolfhub.easycli;
 
 public abstract class InputTask {
 

@@ -1,16 +1,13 @@
-package org.nwolfhub;
+package org.nwolfhub.easycli;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class EasyCLI {
     private HashMap<String, Template> templates = new HashMap<>();

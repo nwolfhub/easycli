@@ -1,4 +1,4 @@
-package org.nwolfhub;
+package org.nwolfhub.easycli;
 
 public class Border {
     public String upChar;
