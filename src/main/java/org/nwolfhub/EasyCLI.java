@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 public class EasyCLI {
     private HashMap<String, Template> templates = new HashMap<>();
     private HashMap<String, InputTask> tasks = new HashMap<>();
+
+    public String activeTemplate;
     private ExecutorService executor = Executors.newFixedThreadPool(1);
     private InputStream in;
     private PrintStream out;
@@ -33,7 +35,12 @@ public class EasyCLI {
                         print(commandNotFoundText.replace("{a}", command));
                     }
                 } else {
-                    tasks.get(command).act(this, inp.substring(command.length() + 1).split(" "));
+                    List<String> args = new ArrayList<>();
+                    try {
+                        args = List.of(inp.substring(command.length() + 1).split(" "));
+                    } catch (Exception ignored) {}
+                    String[] argArr = args.toArray(new String[0]);
+                    tasks.get(command).act(this, argArr);
                 }
             }
         }
@@ -47,7 +54,6 @@ public class EasyCLI {
     public EasyCLI(InputStream in, PrintStream out) {
         this.in = in;
         this.out = out;
-        executor.submit(new Thread(this::listenOnStream));
     }
 
     /**
@@ -56,7 +62,6 @@ public class EasyCLI {
     public EasyCLI() {
         this.in = System.in;
         this.out = System.out;
-        executor.submit(new Thread(this::listenOnStream));
     }
 
     public void stopListening() {
@@ -92,6 +97,15 @@ public class EasyCLI {
         return new ArrayList<>(tasks.values());
     }
 
+    public String getActiveTemplate() {
+        return activeTemplate;
+    }
+
+    public EasyCLI setActiveTemplate(String activeTemplate) {
+        this.activeTemplate = activeTemplate;
+        return this;
+    }
+
     public void print(String text, String template) {
         out.print(templates.get(template).formatText(text));
     }
@@ -100,6 +114,9 @@ public class EasyCLI {
         if (templates.size() == 0) {
             templates.put("default", Defaults.defaultTemplate);
         }
-        print(text, new ArrayList<>(templates.values()).get(templates.size()-1).getName());
+        if (activeTemplate.equals("")) {
+            activeTemplate = new ArrayList<>(templates.values()).get(templates.size()-1).getName();
+        }
+        print(text, activeTemplate);
     }
 }
