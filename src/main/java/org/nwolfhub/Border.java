@@ -61,7 +61,7 @@ public class Border {
             builder.append(midChar);
             builder.append("\n");
         }
-        builder.append(" ").append(downChar.repeat(maxTextLength));
+        builder.append(" ").append(downChar.repeat(maxTextLength)).append("\n");
         return builder.toString();
     }
     public String applyBorder(String text) {
