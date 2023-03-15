@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class EasyCLI {
     private HashMap<String, Template> templates = new HashMap<>();
     private HashMap<String, InputTask> tasks = new HashMap<>();
+    private ExecutorService executor = Executors.newFixedThreadPool(1);
     private InputStream in;
     private PrintStream out;
 
@@ -44,6 +47,7 @@ public class EasyCLI {
     public EasyCLI(InputStream in, PrintStream out) {
         this.in = in;
         this.out = out;
+        executor.submit(new Thread(this::listenOnStream));
     }
 
     /**
@@ -52,6 +56,17 @@ public class EasyCLI {
     public EasyCLI() {
         this.in = System.in;
         this.out = System.out;
+        executor.submit(new Thread(this::listenOnStream));
+    }
+
+    public void stopListening() {
+        executor.shutdownNow();
+    }
+
+    public void startListening() {
+        executor.shutdownNow();
+        executor = Executors.newFixedThreadPool(1);
+        executor.submit(new Thread(this::listenOnStream));
     }
 
     public void addTemplate(Template template) {
