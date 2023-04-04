@@ -2,12 +2,10 @@ package org.nwolfhub.easycli;
 
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class EasyCLI {
     private HashMap<String, Template> templates = new HashMap<>();
@@ -81,6 +79,13 @@ public class EasyCLI {
     public void addTemplate(Template template) {
         templates.put(template.getName(), template);
     }
+    public void addTemplate(Template template, String name) {
+        templates.put(name, template);
+    }
+    public void addTemplate(String name, Template template) {
+        templates.put(name, template);
+    }
+
     public void removeTemplate(String name) {
         templates.remove(name);
     }
@@ -110,17 +115,45 @@ public class EasyCLI {
         return this;
     }
 
-    public void print(String text, String template) {
-        out.print(templates.get(template).formatText(text));
-    }
-
-    public void print(String text) {
+    private void setTemplateIfNone() {
         if (templates.size() == 0) {
             templates.put("default", Defaults.defaultTemplate);
         }
         if (activeTemplate == null) {
             activeTemplate = new ArrayList<>(templates.values()).get(templates.size()-1).getName();
         }
-        print(text, activeTemplate);
+    }
+
+    public void print(String text, String template) {
+        printInternal(text, templates.get(template));
+    }
+    public void print(String text, Template template) {
+        printInternal(text, template);
+    }
+    public void print(String text) {
+        setTemplateIfNone();
+        printInternal(text, templates.get(activeTemplate));
+    }
+
+    public void print(Object... objects) {
+        setTemplateIfNone();
+        printInternal(String.join(" ", Arrays.stream(objects).map(Object::toString).collect(Collectors.joining())), templates.get(activeTemplate));
+    }
+
+    public void print(Template template, Object... objects) {
+        printInternal(String.join(" ", Arrays.stream(objects).map(Object::toString).collect(Collectors.joining())), template);
+    }
+    public void print(String template, Object... objects) {
+        printInternal(String.join(" ", Arrays.stream(objects).map(Object::toString).collect(Collectors.joining())), templates.get(template));
+    }
+
+
+    /**
+     * Result method with formatted stuff passed in already
+     * @param text
+     * @param template
+     */
+    private void printInternal(String text, Template template) {
+        out.print(template.formatText(text));
     }
 }
