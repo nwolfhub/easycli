@@ -146,6 +146,15 @@ public class EasyCLI {
     public void print(String template, Object... objects) {
         printInternal(String.join(" ", Arrays.stream(objects).map(Object::toString).collect(Collectors.joining())), templates.get(template));
     }
+    public void print(Class<?> template, String text) {
+        setTemplateIfNone();
+        printInternal(text, templates.values().stream().filter(e -> e.getClass().equals(template)).findFirst().orElse(templates.get(activeTemplate)));
+    }
+    public void print(String text, Class<?> template) {
+        setTemplateIfNone();
+        printInternal(text, templates.values().stream().filter(e -> e.getClass().equals(template)).findFirst().orElse(templates.get(activeTemplate)));
+    }
+
 
 
     /**
