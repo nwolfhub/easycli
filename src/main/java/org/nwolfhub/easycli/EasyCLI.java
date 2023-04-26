@@ -54,7 +54,6 @@ public class EasyCLI {
     public EasyCLI(InputStream in, PrintStream out) {
         this.in = in;
         this.out = out;
-        executor.submit(new Thread(this::listenOnStream));
     }
 
     /**
@@ -63,7 +62,6 @@ public class EasyCLI {
     public EasyCLI() {
         this.in = System.in;
         this.out = System.out;
-        executor.submit(new Thread(this::listenOnStream));
     }
 
     public void stopListening() {
