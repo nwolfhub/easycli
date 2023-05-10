@@ -1,6 +1,8 @@
 package org.nwolfhub.easycli;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -57,12 +59,36 @@ public class EasyCLI {
     }
 
     /**
-     * Creates an EasyCLI instance. Uses System streams by standard
+     * Creates an EasyCLI instance. Uses System streams
      */
     public EasyCLI() {
         this.in = System.in;
         this.out = System.out;
     }
+
+    /**
+     * Creates an EasyCLI instance. Uses System streams
+     * @param overrideStreams - will override system streams and disallow printing in them. ErrorStream won't be overridden
+     */
+    public EasyCLI(boolean overrideStreams) {
+        this.in = System.in;
+        this.out = System.out;
+        if (overrideStreams) {
+            System.setIn(new InputStream() {
+                @Override
+                public int read() throws IOException {
+                    return 0;
+                }
+            });
+            System.setOut(new PrintStream(new OutputStream() {
+                @Override
+                public void write(int b) throws IOException {
+
+                }
+            }));
+        }
+    }
+
 
     public void stopListening() {
         executor.shutdownNow();
