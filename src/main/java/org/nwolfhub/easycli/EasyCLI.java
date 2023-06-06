@@ -42,6 +42,7 @@ public class EasyCLI {
                         tasks.get(command).act(this, argArr);
                     }
                 }
+            } catch (NoSuchElementException ignored) { //no line found. For docker support
             } catch (Exception e) {
                 e.printStackTrace();
             }
