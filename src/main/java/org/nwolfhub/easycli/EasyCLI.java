@@ -23,6 +23,7 @@ public class EasyCLI {
 
     private void listenOnStream() {
         Scanner sc = new Scanner(in);
+        int errorCounter = 0;
         while (true) {
             try {
                 String inp = sc.nextLine();
@@ -42,9 +43,19 @@ public class EasyCLI {
                         tasks.get(command).act(this, argArr);
                     }
                 }
-            } catch (NoSuchElementException ignored) { //no line found. For docker support
+            } catch (NoSuchElementException e) {
+                errorCounter++;
             } catch (Exception e) {
+                errorCounter++;
                 e.printStackTrace();
+            }
+            if (errorCounter>10) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    //Il be honest: if this was called user really did hard work to fuck his code up THAT bad
+                }
+                errorCounter = 0;
             }
         }
     }
@@ -77,13 +88,13 @@ public class EasyCLI {
         if (overrideStreams) {
             System.setIn(new InputStream() {
                 @Override
-                public int read() throws IOException {
+                public int read() {
                     return 0;
                 }
             });
             System.setOut(new PrintStream(new OutputStream() {
                 @Override
-                public void write(int b) throws IOException {
+                public void write(int b) {
 
                 }
             }));
