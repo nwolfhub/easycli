@@ -1,6 +1,8 @@
 package org.nwolfhub.easycli;
 
-import java.io.IOException;
+import org.nwolfhub.easycli.model.InputTask;
+import org.nwolfhub.easycli.model.Template;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
