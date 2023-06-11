@@ -1,4 +1,6 @@
-package org.nwolfhub.easycli;
+package org.nwolfhub.easycli.model;
+
+import org.nwolfhub.easycli.EasyCLI;
 
 public abstract class InputTask {
 

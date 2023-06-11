@@ -1,4 +1,4 @@
-package org.nwolfhub.easycli;
+package org.nwolfhub.easycli.model;
 
 public class Template {
     public String name;

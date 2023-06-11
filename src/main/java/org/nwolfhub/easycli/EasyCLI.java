@@ -1,6 +1,9 @@
 package org.nwolfhub.easycli;
 
-import java.io.IOException;
+import org.nwolfhub.easycli.model.InputTask;
+import org.nwolfhub.easycli.model.Template;
+import org.nwolfhub.easycli.model.Variable;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -17,6 +20,7 @@ public class EasyCLI {
     private ExecutorService executor = Executors.newFixedThreadPool(1);
     private InputStream in;
     private PrintStream out;
+    private final VariableProcessor variableProcessor = new VariableProcessor();
 
     public String commandNotFoundText = "Command {a} not found";
     public Boolean printNotFoundText = true;
@@ -191,6 +195,38 @@ public class EasyCLI {
         printInternal(text, templates.values().stream().filter(e -> e.getClass().equals(template)).findFirst().orElse(templates.get(activeTemplate)));
     }
 
+    /**
+     * Adds a new variable to the list of variables processed by the variable processor.
+     *
+     * @param v the variable to be added
+     */
+    public void addVariable(Variable v) {
+        variableProcessor.addVariable(v);
+    }
+
+    /**
+     * Removes the variable at the specified index from the list of variables processed by the variable processor.
+     *
+     * @param index the index of the variable to be removed
+     */
+    public void removeVariable(int index) {
+        variableProcessor.removeVariable(index);
+    }
+
+    /**
+     * Clears all the variables in the list of variables processed by the variable processor.
+     */
+    public void clearVariables() {
+        variableProcessor.clearAll();
+    }
+    /**
+     * Returns a list of all variables processed by the variable processor.
+     *
+     * @return a list of Variable objects
+     */
+    public List<Variable> getVariables() {
+        return variableProcessor.getVariables();
+    }
 
 
     /**
@@ -199,6 +235,6 @@ public class EasyCLI {
      * @param template
      */
     private void printInternal(String text, Template template) {
-        out.print(template.formatText(text));
+        out.print(template.formatText(variableProcessor.processText(text)));
     }
 }
