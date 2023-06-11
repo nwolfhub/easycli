@@ -10,7 +10,7 @@ To add an EasyCLI to your project, simply append
 <dependency>
     <groupId>org.nwolfhub.easycli</groupId>
     <artifactId>easycli</artifactId>
-    <version>1.1.4</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 
