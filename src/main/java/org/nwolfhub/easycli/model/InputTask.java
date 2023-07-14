@@ -2,12 +2,7 @@ package org.nwolfhub.easycli.model;
 
 import org.nwolfhub.easycli.EasyCLI;
 
-public abstract class InputTask {
-
-
-    public InputTask() {
-
-    }
+public abstract interface InputTask {
 
 
     /**
@@ -15,5 +10,5 @@ public abstract class InputTask {
      * @param cli EasyCLI instance. Will be set automatically
      * @param params text after space
      */
-   public abstract void act(EasyCLI cli, String... params);
+    void act(EasyCLI cli, String... params);
 }

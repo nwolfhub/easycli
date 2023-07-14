@@ -2,7 +2,7 @@ package org.nwolfhub.easycli.model;
 
 
 public abstract class FlexableValue {
-    public Object meta; //meta object can be used not to recreate it many times (e.g. random or data)
+    public Object meta; //meta-object can be used not to recreate it many times (e.g. random or data)
     public FlexableValue() {
     }
 

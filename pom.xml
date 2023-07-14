@@ -6,7 +6,7 @@
 
     <groupId>org.nwolfhub.easycli</groupId>
     <artifactId>easycli</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <name>EasyCTL</name>
     <description>Library to help you parse input asynchronously and print in style</description>
     <url>https://github.com/nwolfhub/easycli</url>
