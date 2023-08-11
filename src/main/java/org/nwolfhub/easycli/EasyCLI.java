@@ -1,16 +1,17 @@
 package org.nwolfhub.easycli;
 
 import org.nwolfhub.easycli.model.InputTask;
+import org.nwolfhub.easycli.model.Level;
 import org.nwolfhub.easycli.model.Template;
 import org.nwolfhub.easycli.model.Variable;
+import org.nwolfhub.utils.Configurator;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class EasyCLI {
     private HashMap<String, Template> templates = new HashMap<>();
@@ -21,8 +22,9 @@ public class EasyCLI {
     private InputStream in;
     private PrintStream out;
     private final VariableProcessor variableProcessor = new VariableProcessor();
+    public Level level = Level.Warn;
 
-    public String commandNotFoundText = "Command {a} not found";
+    public String commandNotFoundText = "Command {command} not found";
     public Boolean printNotFoundText = true;
 
     private void listenOnStream() {
@@ -35,7 +37,7 @@ public class EasyCLI {
                     String command = inp.split(" ")[0];
                     if (!tasks.containsKey(command)) {
                         if (printNotFoundText) {
-                            print(commandNotFoundText.replace("{a}", command));
+                            print(commandNotFoundText.replace("{command }", command));
                         }
                     } else {
                         List<String> args = new ArrayList<>();
@@ -153,6 +155,64 @@ public class EasyCLI {
     public EasyCLI setActiveTemplate(String activeTemplate) {
         this.activeTemplate = activeTemplate;
         return this;
+    }
+
+    public void detectLogLevel() {
+
+    }
+
+    private Level detectLogLevelInProperties() {
+        try {
+            StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+            ClassLoader loader = trace[2].getClass().getClassLoader();
+            try (InputStream stream = loader.getResourceAsStream("application.properties")) {
+                Properties properties = new Properties();
+                properties.load(stream);
+                if (properties.containsKey("cli-log-level")) {
+                    return Level.valueOf(IntStream.range(0, properties.get("cli-log-level").toString().split("").length)
+                            .mapToObj(i -> {
+                                if (i == 0) {
+                                    return properties.get("cli-log-level").toString().split("")[i].toUpperCase();
+                                } else {
+                                    return properties.get("cli-log-level").toString().split("")[i];
+                                }
+                            })
+                            .collect(Collectors.joining()));
+                }
+            } catch (IOException e) {
+                if(trace.length>3) {
+                    loader = trace[trace.length-1].getClass().getClassLoader();
+                    try (InputStream stream = loader.getResourceAsStream("application.properties")) {
+                        Properties properties = new Properties();
+                        properties.load(stream);
+                        if (properties.containsKey("cli-log-level")) {
+                            return Level.valueOf(IntStream.range(0, properties.get("cli-log-level").toString().split("").length)
+                                    .mapToObj(i -> {
+                                        if (i == 0) {
+                                            return properties.get("cli-log-level").toString().split("")[i].toUpperCase();
+                                        } else {
+                                            return properties.get("cli-log-level").toString().split("")[i];
+                                        }
+                                    })
+                                    .collect(Collectors.joining()));
+                        }
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    private Level detectLogLevelInConfig(File configFile) {
+        try {
+            Configurator configurator = new Configurator(configFile);
+            if(configurator.containsKey("cli-log-level")) {
+                return Level.valueOf(configurator.getValue("cli-log-level"));
+            }
+        } catch (Exception ignored) {}
+        return null;
     }
 
     private void setTemplateIfNone() {
