@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.nwolfhub.easycli</groupId>
+    <groupId>org.nwolfhub</groupId>
     <artifactId>easycli</artifactId>
-    <version>1.2.0</version>
+    <version>1.4.0</version>
     <name>EasyCTL</name>
     <description>Library to help you parse input asynchronously and print in style</description>
     <url>https://github.com/nwolfhub/easycli</url>
@@ -17,7 +17,7 @@
     </scm>
     <developers>
         <developer>
-            <name>Klim</name>
+            <name>Klim Zamulin</name>
             <organization>Nwolfhub</organization>
             <email>admin@nwolfhub.org</email>
         </developer>
@@ -40,6 +40,14 @@
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.nwolfhub</groupId>
+            <artifactId>utils</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
