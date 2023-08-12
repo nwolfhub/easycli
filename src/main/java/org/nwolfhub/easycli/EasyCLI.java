@@ -157,6 +157,15 @@ public class EasyCLI {
         return this;
     }
 
+    public Level getLevel() {
+        return level;
+    }
+
+    public EasyCLI setLevel(Level level) {
+        this.level = level;
+        return this;
+    }
+
     public void detectLogLevel() throws IOException{
         Level level = detectLogLevelInConfig(new File("easycli.cfg"));
         if(level==null) {
