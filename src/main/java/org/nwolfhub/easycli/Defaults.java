@@ -14,7 +14,7 @@ public class Defaults {
     public static Template carriageReturn = new Template("carriage", "\r", "");
     public static Template boxedText = new Template("boxed", "", "").setBorder(squareBorder);
 
-    public static Template loggingTemplate = new Template("logging", "{printDate} ", "\n").addVariable(new Variable("{printDate}", new FlexableValue(new SimpleDateFormat("[dd.MM HH:mm:ss]")) {
+    public static Template loggingTemplate = new Template("logging", "{logLevel} [{printDate}] ", "\n").addVariable(new Variable("{printDate}", new FlexableValue(new SimpleDateFormat("dd.MM HH:mm:ss")) {
         @Override
         public String call() {
             Date date = new Date();

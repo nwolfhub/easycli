@@ -1,9 +1,11 @@
 package org.nwolfhub.easycli;
 
+import org.nwolfhub.easycli.model.Level;
 import org.nwolfhub.easycli.model.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class VariableProcessor {
@@ -49,7 +51,7 @@ public class VariableProcessor {
      */
     public String processText(String text) {
         AtomicReference<String> modified = new AtomicReference<>(text);
-        variables.stream().forEach(variable -> modified.set(variable.processText(modified.get())));
+        variables.forEach(variable -> modified.set(variable.processText(modified.get())));
         return modified.get();
     }
 }

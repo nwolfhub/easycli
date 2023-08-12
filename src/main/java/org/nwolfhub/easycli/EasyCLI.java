@@ -157,8 +157,20 @@ public class EasyCLI {
         return this;
     }
 
-    public void detectLogLevel() {
+    public void detectLogLevel() throws IOException{
+        Level level = detectLogLevelInConfig(new File("easycli.cfg"));
+        if(level==null) {
+            level = detectLogLevelInProperties();
+            if(level==null) {
+                throw new IOException("Could not detect cli-log-level variable in both easycli.cfg and application.properties");
+            } else this.level = level;
+        } else this.level = level;
+    }
 
+    public void detectLogLevel(File file) throws IOException {
+        Level level = detectLogLevelInConfig(file);
+        if(level==null) throw new IOException("Could not detect log level in provided file");
+        else this.level=level;
     }
 
     private Level detectLogLevelInProperties() {
@@ -216,7 +228,7 @@ public class EasyCLI {
     }
 
     private void setTemplateIfNone() {
-        if (templates.size() == 0) {
+        if (templates.isEmpty()) {
             templates.put("default", Defaults.defaultTemplate);
         }
         if (activeTemplate == null) {
@@ -254,6 +266,37 @@ public class EasyCLI {
         setTemplateIfNone();
         printInternal(text, templates.values().stream().filter(e -> e.getClass().equals(template)).findFirst().orElse(templates.get(activeTemplate)));
     }
+    public void printAtLevel(String text, String template, Level level) {
+        printInternal(text, templates.get(template), level);
+    }
+    public void printAtLevel(String text, Template template, Level level) {
+        printInternal(text, template, level);
+    }
+    public void printAtLevel(String text, Level level) {
+        setTemplateIfNone();
+        printInternal(text, templates.get(activeTemplate), level);
+    }
+
+    public void printAtLevel(Level level, Object... objects) {
+        setTemplateIfNone();
+        printInternal(String.join(" ", Arrays.stream(objects).map(Object::toString).collect(Collectors.joining())), templates.get(activeTemplate), level);
+    }
+
+    public void printAtLevel(Template template, Level level, Object... objects) {
+        printInternal(String.join(" ", Arrays.stream(objects).map(Object::toString).collect(Collectors.joining())), template, level);
+    }
+    public void printAtLevel(String template, Level level, Object... objects) {
+        printInternal(String.join(" ", Arrays.stream(objects).map(Object::toString).collect(Collectors.joining())), templates.get(template), level);
+    }
+    public void printAtLevel(Class<?> template, Level level, String text) {
+        setTemplateIfNone();
+        printInternal(text, templates.values().stream().filter(e -> e.getClass().equals(template)).findFirst().orElse(templates.get(activeTemplate)), level);
+    }
+    public void printAtLevel(String text, Level level, Class<?> template) {
+        setTemplateIfNone();
+        printInternal(text, templates.values().stream().filter(e -> e.getClass().equals(template)).findFirst().orElse(templates.get(activeTemplate)), level);
+    }
+    
 
     /**
      * Adds a new variable to the list of variables processed by the variable processor.
@@ -294,7 +337,11 @@ public class EasyCLI {
      * @param text
      * @param template
      */
+    private void printInternal(String text, Template template, Level level) {
+        if(level.ordinal()>=this.level.ordinal()) out.print(template.formatText(variableProcessor.processText(text), level));
+    }
+    
     private void printInternal(String text, Template template) {
-        out.print(template.formatText(variableProcessor.processText(text)));
+        printInternal(text, template, this.level);
     }
 }

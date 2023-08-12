@@ -3,6 +3,7 @@ package org.nwolfhub.easycli.model;
 import org.nwolfhub.easycli.VariableProcessor;
 
 import java.util.List;
+import java.util.Locale;
 
 public class Template {
     public String name;
@@ -84,8 +85,8 @@ public class Template {
      * @param text - unedited text
      * @return modified text
      */
-    public String formatText(String text) {
-        text = processor.processText(prefix + text + postfix);
+    public String formatText(String text, Level level) {
+        text = processor.processText(prefix + text.replace("{logLevel}", level.toString().toUpperCase(Locale.ROOT)) + postfix);
         return border==null?(text):border.applyBorder(text);
     }
 
