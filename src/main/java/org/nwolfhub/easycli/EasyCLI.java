@@ -348,6 +348,7 @@ public class EasyCLI {
      */
     private void printInternal(String text, Template template, Level level) {
         if(level.ordinal()>=this.level.ordinal()) out.print(template.formatText(variableProcessor.processText(text), level));
+        if(level==Level.Panic) System.exit(1);
     }
     
     private void printInternal(String text, Template template) {
