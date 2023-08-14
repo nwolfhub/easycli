@@ -86,7 +86,7 @@ public class Template {
      * @return modified text
      */
     public String formatText(String text, Level level) {
-        text = processor.processText(prefix.replace("{logLevel}", level.toString().toUpperCase(Locale.ROOT) + text) + postfix);
+        text = processor.processText(prefix.replace("{logLevel}", level.toString().toUpperCase(Locale.ROOT)) + text + postfix);
         return border==null?(text):border.applyBorder(text);
     }
 
